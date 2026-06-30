@@ -1,5 +1,6 @@
 package br.com.quickq.quickq_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ public class Usuario {
     private String email;
 
     @Column(name = "hash_senha")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Nunca devolve o hash da senha nas respostas
     private String hashSenha;
 
     private String perfil; // Ex: ADMIN, MEDICO
