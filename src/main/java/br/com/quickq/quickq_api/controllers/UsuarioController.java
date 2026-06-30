@@ -1,6 +1,7 @@
 package br.com.quickq.quickq_api.controllers;
 
 import br.com.quickq.quickq_api.entities.Usuario;
+import br.com.quickq.quickq_api.security.JwtUtil;
 import br.com.quickq.quickq_api.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/salvar")
     public Usuario salvarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.salvarUsuario(usuario);
@@ -30,7 +34,8 @@ public class UsuarioController {
         Usuario usuario = usuarioService.autenticar(email, senha);
 
         if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+            String token = jwtUtil.gerarToken(usuario.getEmail(), usuario.getNome(), usuario.getPerfil());
+            return ResponseEntity.ok(Map.of("token", token, "usuario", usuario));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
         }
