@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso - QuickQ Analyser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+    <!-- TELA DE LOGIN -->
+    <div class="login-container" id="tela-login">
+        <div class="login-header">
+            <h1>QuickQ Analyser</h1>
+            <p>Bem-vindo de volta! Faça login para continuar.</p>
+        </div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">E-mail</label>
+                <input type="email" id="login-email" placeholder="admin@quickq.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-senha">Senha</label>
+                <input type="password" id="login-senha" placeholder="******" required>
+            </div>
+            
+            <div id="msg-erro-login" class="error-message" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+        
+        <div class="login-footer">
+            <!-- AQUI ESTÁ O BOTÃO QUE FALTAVA -->
+            <p>Não tem uma conta? <a href="#" id="btn-ir-cadastro">Criar conta agora</a></p>
+        </div>
+    </div>
+
+    <!-- TELA DE CADASTRO (Escondida por padrão) -->
+    <div class="login-container" id="tela-cadastro" style="display: none;">
+        <div class="login-header">
+            <h1>Criar Conta</h1>
+            <p>Preencha os dados para acessar o sistema.</p>
+        </div>
+        
+        <form id="cadastro-form">
+            <div class="form-group">
+                <label for="cad-nome">Nome Completo</label>
+                <input type="text" id="cad-nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cad-email">E-mail</label>
+                <input type="email" id="cad-email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cad-perfil">Perfil</label>
+                <select id="cad-perfil">
+                    <option value="MEDICO">Médico</option>
+                    <option value="NEUROPSICOLOGO">Neuropsicólogo</option>
+                    <option value="OPERADOR">Operador</option>
+                    <option value="ADMIN">Administrador</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="cad-senha">Senha</label>
+                <input type="password" id="cad-senha" required>
+            </div>
+            
+            <div id="msg-erro-cadastro" class="error-message" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-success btn-block">Cadastrar</button>
+        </form>
+        
+        <div class="login-footer">
+            <p>Já tem uma conta? <a href="#" id="btn-ir-login">Fazer Login</a></p>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

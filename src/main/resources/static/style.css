@@ -1,0 +1,255 @@
+/* Remove margens e preenchimentos padrão do navegador */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    height: 100%;
+}
+
+/* Organiza o container principal em duas colunas */
+.container-principal {
+    display: flex;
+    min-height: 100vh; 
+}
+
+/* --- Estilos do Menu da Esquerda --- */
+.menu-lateral {
+    width: 250px; 
+    background-color: #f4f4f4; 
+    border-right: 1px solid #ddd; 
+    padding: 20px;
+    box-sizing: border-box; 
+    position: relative; 
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-lateral ul {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu-lateral li {
+    padding: 15px 10px; 
+    cursor: pointer; 
+    border-bottom: 1px solid #eee; 
+    transition: background-color 0.2s;
+}
+
+.menu-lateral li:hover {
+    background-color: #e0e0e0; 
+}
+
+/* --- Estilos do Conteúdo da Direita --- */
+.conteudo-principal {
+    flex: 1; 
+    padding: 40px; 
+    box-sizing: border-box;
+    overflow-y: auto; 
+    height: 100vh;
+}
+
+/* --- Estilos das Abas (Tabs) --- */
+.tab-menu {
+    border-bottom: 2px solid #007bff; 
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f0f0f0; 
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px 5px 0 0; 
+}
+
+.tab-button.active {
+    background-color: #007bff; 
+    color: white; 
+}
+
+.tab-content {
+    display: none; 
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* --- Estilos dos Formulários --- */
+.evaluation-form {
+    display: flex;
+    flex-direction: column; 
+    gap: 15px; 
+    max-width: 600px; 
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column; 
+    gap: 5px; 
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; 
+}
+
+.form-group textarea {
+    resize: vertical; 
+}
+
+/* --- Estilos de Botões de Ação --- */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+.btn-primary { background-color: #007bff; color: white; }
+.btn-success { background-color: #28a745; color: white; }
+.btn-warning { background-color: #ffc107; color: #212529; }
+.btn-block { width: 100%; }
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.report-box {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+    min-height: 100px;
+    margin-bottom: 15px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 25px 0;
+}
+
+/* --- Estilos da Tela de Consulta --- */
+.consulta-container {
+    display: flex;
+    gap: 30px; 
+}
+
+.filtro-container {
+    width: 300px; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #fcfcfc;
+    flex-shrink: 0; 
+}
+
+.resultados-container { flex: 1; }
+
+.browser-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.browser-table th, .browser-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.browser-table th { background-color: #f4f4f4; }
+.browser-table tbody tr:hover { background-color: #f0f7ff; cursor: pointer; }
+
+.relatorio-viewer {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+/* --- Botão de Tema e Logout --- */
+.theme-toggle, .logout-btn {
+    padding: 10px 15px;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+.logout-btn {
+    background-color: #ffcccc;
+    border-color: #ffaaaa;
+    color: #cc0000;
+}
+
+/* --- MODO NOTURNO --- */
+body.dark-mode { background-color: #121212; color: #e0e0e0; }
+body.dark-mode .menu-lateral { background-color: #1e1e1e; border-right: 1px solid #333; color: #e0e0e0; }
+body.dark-mode .menu-lateral li { border-bottom: 1px solid #333; }
+body.dark-mode .menu-lateral li:hover { background-color: #2a2a2a; }
+body.dark-mode .theme-toggle { background-color: #333; border-color: #555; color: #e0e0e0; }
+body.dark-mode .logout-btn { background-color: #4a2a2a; border-color: #663333; color: #ffaaaa; }
+body.dark-mode .conteudo-principal { background-color: #121212; color: #e0e0e0; }
+body.dark-mode .tab-button { background-color: #2a2a2a; color: #ccc; border: 1px solid #333; }
+body.dark-mode .tab-button.active { background-color: #007bff; color: white; }
+body.dark-mode .tab-menu { border-bottom: 2px solid #007bff; }
+body.dark-mode input, body.dark-mode select, body.dark-mode textarea { background-color: #2c2c2c; color: #e0e0e0; border: 1px solid #555; }
+body.dark-mode .browser-table th { background-color: #2a2a2a; }
+body.dark-mode .browser-table th, body.dark-mode .browser-table td { border: 1px solid #444; }
+body.dark-mode .browser-table tbody tr:hover { background-color: #3a3a3a; }
+body.dark-mode .report-box, body.dark-mode .relatorio-viewer, body.dark-mode .filtro-container { background-color: #1e1e1e; border: 1px solid #333; }
+body.dark-mode hr { border-top: 1px solid #444; }
+
+
+/* --- TELA DE LOGIN --- */
+.login-body {
+    background-color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.login-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+.login-header h1 { margin-top: 0; color: #007bff; font-size: 24px; }
+.login-header p { color: #666; margin-bottom: 30px; }
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+.login-footer { margin-top: 20px; text-align: center; font-size: 13px; color: #888; }
