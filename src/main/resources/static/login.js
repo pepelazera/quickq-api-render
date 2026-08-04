@@ -31,9 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
         telaLogin.style.display = "block";   
     });
 
-    // ==========================================
     //  LÓGICA DE LOGIN (ENTRAR)
-    // ==========================================
     const formLogin = document.getElementById("login-form");
     if (formLogin) {
         formLogin.addEventListener("submit", function(e) {
@@ -49,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             fetch('/api/usuarios/login', {
                 method: 'POST',
+                credentials: 'include', // recebe o cookie HttpOnly de autenticação
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, senha: senha })
             })
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 console.log("Login Sucesso!", data.usuario);
-                localStorage.setItem("token", data.token);
+                // O token não vem mais no corpo da resposta: fica só no cookie HttpOnly (auth_token).
                 localStorage.setItem("usuarioLogado", JSON.stringify(data.usuario));
                 window.location.href = "index2.html";
             })
@@ -70,9 +69,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // ==========================================
-    //  LÓGICA DE CADASTRO (CRIAR CONTA)
-    // ==========================================
     const formCadastro = document.getElementById("cadastro-form");
     if (formCadastro) {
         formCadastro.addEventListener("submit", function(e) {

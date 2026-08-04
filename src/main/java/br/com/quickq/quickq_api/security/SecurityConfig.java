@@ -37,6 +37,9 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        // Necessário para o navegador enviar/receber o cookie de autenticação (auth_token).
+        // A proteção contra CSRF entre origens fica por conta do token XSRF-TOKEN (ver JwtAuthFilter).
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -52,7 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight CORS
                         .requestMatchers("/", "/index.html", "/index2.html", "/*.css", "/*.js", "/favicon.ico").permitAll() // frontend estatico
-                        .requestMatchers("/api/usuarios/login").permitAll()
+                        .requestMatchers("/api/usuarios/login", "/api/usuarios/logout", "/api/usuarios/salvar").permitAll()
                         .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
                         .requestMatchers("/api/auditoria/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

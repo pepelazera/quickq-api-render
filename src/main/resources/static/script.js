@@ -5,10 +5,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // =================================================================
     // 1. SEGURANÇA E LOGOUT
     // =================================================================
+    // Checagem só de UX (mostra/esconde tela); a autenticação de verdade é o cookie
+    // HttpOnly auth_token, que o JS não consegue ler - quem garante isso é o backend.
     const usuarioLogado = localStorage.getItem("usuarioLogado");
-    const tokenLogado = localStorage.getItem("token");
 
-    if (!usuarioLogado || !tokenLogado) {
+    if (!usuarioLogado) {
         window.location.href = "index.html";
         return;
     }
@@ -17,18 +18,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const API_BASE = '';
 
-    // Faz fetch já com o header Authorization; se o token estiver ausente/expirado, volta pro login.
+    function getCookie(nome) {
+        const match = document.cookie.match(new RegExp('(?:^|; )' + nome + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    // Faz fetch com o cookie de sessão + header X-CSRF-Token (double-submit); se a
+    // sessão estiver ausente/expirada, volta pro login.
     function apiFetch(path, options = {}) {
+        const metodo = (options.method || 'GET').toUpperCase();
         const headers = Object.assign(
             { 'Content-Type': 'application/json' },
-            options.headers || {},
-            { 'Authorization': 'Bearer ' + localStorage.getItem("token") }
+            options.headers || {}
         );
+        if (metodo !== 'GET' && metodo !== 'HEAD') {
+            headers['X-CSRF-Token'] = getCookie('XSRF-TOKEN') || '';
+        }
 
-        return fetch(API_BASE + path, Object.assign({}, options, { headers })).then(res => {
+        return fetch(API_BASE + path, Object.assign({}, options, { headers, credentials: 'include' })).then(res => {
             if (res.status === 401) {
                 localStorage.removeItem("usuarioLogado");
-                localStorage.removeItem("token");
                 window.location.href = "index.html";
                 throw new Error("Sessão expirada. Faça login novamente.");
             }
@@ -50,9 +59,12 @@ document.addEventListener("DOMContentLoaded", function() {
     btnLogout.style.color = "#cc0000";
 
     btnLogout.onclick = function() {
-        localStorage.removeItem("usuarioLogado");
-        localStorage.removeItem("token");
-        window.location.href = "index.html";
+        apiFetch('/api/usuarios/logout', { method: 'POST' })
+            .catch(() => {}) // mesmo se der erro, limpa o estado local e sai
+            .finally(() => {
+                localStorage.removeItem("usuarioLogado");
+                window.location.href = "index.html";
+            });
     };
 
     const btnTema = document.getElementById("theme-toggle");
