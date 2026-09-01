@@ -331,16 +331,19 @@ document.addEventListener("DOMContentLoaded", function() {
         btn.addEventListener("click", function() {
             let htmlCampos = "";
             campos.forEach(c => {
+                const required = c.required ? "required" : "";
+                const requiredMarker = c.required ? " *" : "";
+                const min = c.min !== undefined ? `min="${c.min}"` : "";
                 if(c.type === 'select') {
                     let opts = c.options.map(o => `<option value="${o.value}">${o.text}</option>`).join('');
-                    htmlCampos += `<div class="form-group"><label>${c.label}:</label><select id="${c.id}">${opts}</select></div>`;
+                    htmlCampos += `<div class="form-group"><label>${c.label}${requiredMarker}:</label><select id="${c.id}" ${required}>${opts}</select></div>`;
                 } else if(c.type === 'textarea') {
-                    htmlCampos += `<div class="form-group"><label>${c.label}:</label><textarea id="${c.id}"></textarea></div>`;
+                    htmlCampos += `<div class="form-group"><label>${c.label}${requiredMarker}:</label><textarea id="${c.id}" ${required}></textarea></div>`;
                 } else {
                     let style = c.width ? `style="width:${c.width}"` : "";
                     let type = c.type || "text";
                     let disabled = c.disabled ? "disabled" : "";
-                    htmlCampos += `<div class="form-group"><label>${c.label}:</label><input type="${type}" id="${c.id}" ${style} ${disabled}></div>`;
+                    htmlCampos += `<div class="form-group"><label>${c.label}${requiredMarker}:</label><input type="${type}" id="${c.id}" ${style} ${disabled} ${required} ${min}></div>`;
                 }
             });
 
@@ -374,9 +377,20 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             document.getElementById("btn-salvar").addEventListener("click", function() {
+                const formulario = document.getElementById("form-cadastro");
+
+                campos.forEach(c => {
+                    const campo = document.getElementById(c.id);
+                    const vazio = c.required && campo.value.trim() === "";
+                    campo.setCustomValidity(vazio ? `${c.label} é obrigatório` : "");
+                });
+
+                if (!formulario.reportValidity()) return;
+
                 let dados = {};
                 campos.forEach(c => {
                     let val = document.getElementById(c.id).value;
+                    if(c.required) val = val.trim();
                     // Tratamentos especiais
                     if(c.id === 'equip-ativo') val = (val === 'true');
                     // Tratamento de Hora (Adiciona :00 para o Java LocalTime)
@@ -408,12 +422,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- CONFIGURAÇÃO DE CADA TELA ---
     
     configCadastro("menu-cliente", "Cadastro de Cliente", [
-        { label: "Nome", id: "cliente-nome", prop: "nome" },
-        { label: "Idade", id: "cliente-idade", type: "number", width: "100px", prop: "idade" },
+        { label: "Nome", id: "cliente-nome", prop: "nome", required: true },
+        { label: "Idade", id: "cliente-idade", type: "number", width: "100px", prop: "idade", required: true, min: 1 },
         { label: "Gênero", id: "cliente-genero", type: "select", options:[{value:"M", text:"Masculino"}, {value:"F", text:"Feminino"}], prop: "genero" },
         { label: "Atividade", id: "cliente-atividade", prop: "atividadePrincipal" },
-        { label: "Responsável", id: "cliente-responsavel", prop: "responsavel" },
-        { label: "Diagnóstico", id: "cliente-diagnostico", type: "textarea", prop: "diagnostico" },
+        { label: "Responsável", id: "cliente-responsavel", prop: "responsavel", required: true },
+        { label: "Diagnóstico", id: "cliente-diagnostico", type: "textarea", prop: "diagnostico", required: true },
         { label: "Whatsapp", id: "cliente-whatsapp", prop: "whatsapp" },
         { label: "Email", id: "cliente-email", type: "email", prop: "email" },
         { label: "Endereço", id: "cliente-endereco", prop: "endereco" },
@@ -421,12 +435,12 @@ document.addEventListener("DOMContentLoaded", function() {
     ], "/api/clientes/salvar", "Cliente");
 
     configCadastro("menu-neuropsicologo", "Cadastro de Neuropsicólogo", [
-        { label: "Nome", id: "neuro-nome", prop: "nome" },
-        { label: "CRP", id: "neuro-crp", prop: "crp" },
+        { label: "Nome", id: "neuro-nome", prop: "nome", required: true },
+        { label: "CRP", id: "neuro-crp", prop: "crp", required: true },
         { label: "Whatsapp", id: "neuro-zap", prop: "whatsapp" },
-        { label: "Email", id: "neuro-email", prop: "email" },
+        { label: "Email", id: "neuro-email", type: "email", prop: "email", required: true },
         { label: "Endereço", id: "neuro-end", prop: "endereco" },
-        { label: "Senha", id: "neuro-senha", type: "password", prop: "hashSenha" }
+        { label: "Senha", id: "neuro-senha", type: "password", prop: "hashSenha", required: true }
     ], "/api/neuropsicologos/salvar", "Neuropsicólogo");
 
     configCadastro("menu-operador-eeg", "Cadastro de Operador", [
